@@ -3,26 +3,28 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 
 	"jaytaylor.com/html2text"
 )
 
 func main() {
-	bhtml, err := ioutil.ReadAll(os.Stdin)
+	os.Exit(run())
+}
+
+func run() int {
+	input, err := ioutil.ReadAll(os.Stdin)
 	if err != nil {
-		log.Printf("Unexpected error when reading stdin: %v", err)
-		return
+		fmt.Fprintf(os.Stderr, "Unexpected error when reading stdin: %v\n", err)
+		return 1
 	}
-	txt, err := html2text.FromString(string(bhtml), html2text.Options{PrettyTables: false})
+
+	txt, err := html2text.FromString(string(input), html2text.Options{PrettyTables: true})
 	if err != nil {
-		log.Printf("Unexpected error when generating txt from html: %v", err)
-		return
+		fmt.Fprintf(os.Stderr, "Unexpected error when generating txt from html: %v\n", err)
+		return 1
 	}
-	_, err = fmt.Fprintln(os.Stdout, txt)
-	if err != nil {
-		log.Printf("Unexpected error when writing to stdout: %v", err)
-		return
-	}
+
+	fmt.Fprintln(os.Stdout, txt)
+	return 0
 }
