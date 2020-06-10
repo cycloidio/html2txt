@@ -19,7 +19,7 @@ func run() int {
 		return 1
 	}
 
-	txt, err := html2text.FromString(string(input), html2text.Options{PrettyTables: true})
+	txt, err := html2text.FromString(string(input), html2text.Options{PrettyTables: false})
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unexpected error when generating txt from html: %v\n", err)
 		return 1
